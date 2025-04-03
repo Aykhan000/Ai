@@ -106,7 +106,7 @@ class Logic():
             
         
     def evaluate(self,node):
-        
+
         lesscount = 0 # number of pairs in the number, that their sum of are less than 7
         equalcount = 0
         greatercount = 0
@@ -132,7 +132,7 @@ class Logic():
             eval -=add/6
         
         return (node.p2-node.p1)+eval/6
-
+    # https://www.geeksforgeeks.org/mini-max-algorithm-in-artificial-intelligence/
     def minmax(self,node, depth, maximizing_player):
         if len(node.string)<=1 or depth == 0:
             return self.evaluate(node)
@@ -151,7 +151,7 @@ class Logic():
                 min_eval = min(min_eval, eval)
 
             return min_eval
-    
+    #https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
     def alphabeta(self,node, depth, alpha, beta, maximizingPlayer):
         if len(node.string)<=1 or depth == 0:
             return self.evaluate(node)
