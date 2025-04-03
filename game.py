@@ -23,6 +23,8 @@ class Game():
         self.start_useMinmax = True
         self.start_playerfirst = True
 
+        self.thinking_times = []
+
         self.ai_search_depth = 3
 
     def game_loop(self):   
@@ -45,6 +47,7 @@ class Game():
                         self.CheckWinner()
                         self.UpdateUI()
                         think_time = (pygame.time.get_ticks() - start_time)/1000
+                        self.thinking_times.append(think_time)
                         print("AI thought for : ",think_time, "seconds.")
                 if(self.buttons):    
                     for btn in self.buttons:
@@ -70,15 +73,21 @@ class Game():
     def start_game(self):
         print("Start Button Clicked!")
         self.SwitchState(GameState.PLAYING)
-        pygame.time.set_timer(pygame.USEREVENT, 1)  
-
-
+        pygame.time.set_timer(pygame.USEREVENT, 1)
+        self.thinking_times = []  
         self.UpdateUI()
 
     def quit_game(self):
         print("Quit Button Clicked!")
         if(self.Logic_Manager):
             self.Logic_Manager.printTree()
+            print(self.Logic_Manager.node_counter)
+            avg = 0
+            for x in self.thinking_times:
+                avg +=x
+            if(self.thinking_times):
+                avg /=len(self.thinking_times)
+            print("average thinking time on last game",avg)
         self.running = False
 
     def increment_numberLength(self,amount):
@@ -129,7 +138,7 @@ class Game():
         self.PairSelectionButtons = []
         buttonwidth = 41
         for i in range(1,n):
-            PairSelectionButton = Button(((((WIDTH//2)-i*buttonwidth)-buttonwidth/2+float(n/2)*buttonwidth), HEIGHT//3-44.5, buttonwidth, 87.5), colors.GREEN, f"", FONTS[0], lambda i=i: self.SelectPair(n-i))# n-i because the buttons are created right to left
+            PairSelectionButton = Button(((((WIDTH//2)-i*buttonwidth)-buttonwidth/2+float(n/2)*buttonwidth), HEIGHT//3-44.5, buttonwidth, 87.5), colors.GREEN, f"", FONTS[0], lambda index=i: self.SelectPair(n-index))# n-i because the buttons are created right to left
             self.PairSelectionButtons.append(PairSelectionButton)
 
     def SelectPair(self, selected_pair_id):
